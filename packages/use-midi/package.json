@@ -1,0 +1,42 @@
+{
+  "name": "@mkaradeniz/use-midi",
+  "version": "1.0.0",
+  "author": "Max Karadeniz <max@karadeniz.io> (http://karadeniz.io/)",
+  "description": "React Hook for the 'Web MIDI API'.",
+  "keywords": [
+    "hooks",
+    "midi",
+    "react",
+    "typescript",
+    "web-midi-api"
+  ],
+  "homepage": "https://github.com/mkaradeniz/hooks#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mkaradeniz/hooks.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mkaradeniz/hooks/issues"
+  },
+  "license": "MIT",
+  "main": "dist/index",
+  "scripts": {
+    "build": "npm run build:clean && npm run build:dist",
+    "build:clean": "rimraf dist",
+    "build:dist": "tsc -p tsconfig.build.json",
+    "format": "prettier \"./src/**\" --config ../../prettier.config.js --loglevel warn --write",
+    "lint": "tslint \"./src/**\" --config ../../tslint.config.js",
+    "prepublishOnly": "npm run format && npm run lint  && npm run build"
+  },
+  "devDependencies": {
+    "@types/react": "16.7.18",
+    "@types/webmidi": "2.0.2",
+    "react": "16.7.0-alpha.2"
+  },
+  "peerDependencies": {
+    "react": "^16.7.0-alpha.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

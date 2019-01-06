@@ -1,0 +1,31 @@
+{
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "lerna run build",
+    "clean": "lerna clean",
+    "format": "lerna run format",
+    "bootstrap": "lerna bootstrap",
+    "lerna:version": "lerna version",
+    "lerna:wizard": "npx lerna-wizard",
+    "lint": "lerna run lint",
+    "precommit": "npm run format && npm run lint",
+    "release": "lerna publish"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run precommit"
+    }
+  },
+  "devDependencies": {
+    "@mkaradeniz/prettier-config": "1.1.0",
+    "@mkaradeniz/tslint-config-react": "1.1.0",
+    "husky": "1.3.1",
+    "lerna": "3.8.5",
+    "prettier": "1.15.3",
+    "tslint": "5.12.0",
+    "typescript": "3.2.2"
+  }
+}

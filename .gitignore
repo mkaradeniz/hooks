@@ -1,0 +1,30 @@
+# Archives
+*.tgz
+
+# Builds
+dist/
+
+# Cache
+.npm
+.eslintcache
+.cache/
+
+# Dependencies
+node_modules/
+
+# Editor
+.vscode/
+
+# Environment
+.env
+
+# Logs
+*.log
+logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# System
+.DS_Store
+etc/
