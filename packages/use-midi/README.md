@@ -14,6 +14,11 @@ or
 npm install @mkaradeniz/use-midi
 ```
 
+## Demo
+
+- [Demo](https://hardcore-lamport-145a83.netlify.com/)
+- [Example](example/)
+
 ## Usage
 
 ```typescript
