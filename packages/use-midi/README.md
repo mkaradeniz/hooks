@@ -24,9 +24,9 @@ const [midiMessages, { isSupported, isRequested, isAllowed }, requestMidiAccess,
 
 ### Input
 
-| Type      | Default                                                                                        |
-| --------- | ---------------------------------------------------------------------------------------------- |
-| `Options` | `{ debug: false, manuallyRequestPermission: true, suppressActiveSensing: true, sysex: false }` |
+| Type      | Default                                                                                              |
+| --------- | ---------------------------------------------------------------------------------------------------- |
+| `Options` | `{ automaticallyRequestPermission: false, debug: false, suppressActiveSensing: true, sysex: false }` |
 
 #### `MidiMessage`
 
@@ -40,13 +40,13 @@ const [midiMessages, { isSupported, isRequested, isAllowed }, requestMidiAccess,
 
 #### `Options`
 
-| Option                      | Type                                 | Description                                                                                                                                                              | Default     |
-| --------------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------- |
-| `callback`                  | `(midiMessage: MidiMessage) => void` | If provided, the callback will be called on every received `MidiMessage`.                                                                                                | `undefined` |
-| `debug`                     | `boolean`                            | If set to `true`, `useMidi` will log every event to the console.                                                                                                         | `false`     |
-| `manuallyRequestPermission` | `boolean`                            | If set to `true`, `useMidi` will _not_ automatically ask for the user's permission to access the MIDI devices. Instead the consumer is expected to call `requestAccess`. | `true`      |
-| `suppressActiveSensing`     | `boolean`                            | If set to `true`, `useMidi` will ignore the [Active Sensing](http://electronicmusic.wikia.com/wiki/Active_sensing) event.                                                | `true`      |
-| `sysex`                     | `boolean`                            | If set to `true`, `useMidi` use the [sysex option](https://webaudio.github.io/web-midi-api/#dom-midioptions-sysex) when requesting MIDI access.                          | `false`     |
+| Option                           | Type                                 | Description                                                                                                                                                           | Default     |
+| -------------------------------- | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `automaticallyRequestPermission` | `boolean`                            | If set to `true`, `useMidi` will automatically ask for the user's permission to access the MIDI devices, instead of waiting for the consumer to call `requestAccess`. | `false`     |
+| `callback`                       | `(midiMessage: MidiMessage) => void` | If provided, the callback will be called on every received `MidiMessage`.                                                                                             | `undefined` |
+| `debug`                          | `boolean`                            | If set to `true`, `useMidi` will log every event to the console.                                                                                                      | `false`     |
+| `suppressActiveSensing`          | `boolean`                            | If set to `true`, `useMidi` will ignore the [Active Sensing](http://electronicmusic.wikia.com/wiki/Active_sensing) event.                                             | `true`      |
+| `sysex`                          | `boolean`                            | If set to `true`, `useMidi` use the [sysex option](https://webaudio.github.io/web-midi-api/#dom-midioptions-sysex) when requesting MIDI access.                       | `false`     |
 
 ### Returns
 

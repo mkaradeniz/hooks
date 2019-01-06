@@ -1,9 +1,5 @@
 import { useEffect, useState } from 'react'
 
-// Constants
-
-const IS_MIDI_ACCESS_SUPPORTED = !!window && !!window.navigator && !!window.navigator.requestMIDIAccess
-
 // Util
 
 const debugLogger = (logDebugMessage: boolean, message: string, ...rest: any[]) => {
@@ -27,9 +23,9 @@ type Callback = (midiMessage: MidiMessage) => void
 type RequestPermission = () => void
 
 interface Options {
+  automaticallyRequestPermission?: boolean
   callback?: Callback
   debug?: boolean
-  manuallyRequestPermission?: boolean
   suppressActiveSensing?: boolean
   sysex?: boolean
 }
@@ -43,13 +39,13 @@ interface Status {
 type Returns = [MidiMessage[], Status, RequestPermission, WebMidi.MIDIAccess?]
 
 const useMidi = (options: Options = {}): Returns => {
-  const { callback, debug = false, manuallyRequestPermission = true, suppressActiveSensing = true, sysex = false } = options
+  const { automaticallyRequestPermission = false, callback, debug = false, suppressActiveSensing = true, sysex = false } = options
 
   const [isAllowed, setIsAllowed] = useState<boolean>(false)
   const [isRequested, setIsRequested] = useState<boolean>(false)
-  const [isSupported, setIsSupported] = useState<boolean>(false)
   const [midiAccessInterface, setMidiAccessInterface] = useState<WebMidi.MIDIAccess | undefined>(undefined)
   const [midiMessages, setMidiMessages] = useState<MidiMessage[]>([])
+  const isSupported = !!window && !!window.navigator && !!window.navigator.requestMIDIAccess
 
   const messageReciever = (midiMessageEvent: WebMidi.MIDIMessageEvent) => {
     const [commandCode, note, velocity] = midiMessageEvent.data
@@ -61,7 +57,7 @@ const useMidi = (options: Options = {}): Returns => {
       // Active Sensing Event (see: http://electronicmusic.wikia.com/wiki/Active_sensing)
       case 254:
         if (suppressActiveSensing) {
-          // debugLogger(debug, 'Skipping `active sensing` message.')
+          debugLogger(debug, 'Skipping `active sensing` message.')
 
           break
         }
@@ -107,10 +103,7 @@ const useMidi = (options: Options = {}): Returns => {
   }
 
   const requestAccess = async () => {
-    if (IS_MIDI_ACCESS_SUPPORTED) {
-      debugLogger(debug, '`requestMIDIAccess` is supported.', { options })
-
-      setIsSupported(true)
+    if (isSupported) {
       setIsRequested(true)
 
       try {
@@ -123,14 +116,12 @@ const useMidi = (options: Options = {}): Returns => {
         handleFailure(error)
       }
     } else {
-      debugLogger(debug, '`requestMIDIAccess` is not supported.', { options })
-
-      setIsSupported(false)
+      debugLogger(debug, 'Canceling request for permission, `requestMIDIAccess` is not supported.', { options })
     }
   }
 
   useEffect(() => {
-    if (!manuallyRequestPermission) {
+    if (automaticallyRequestPermission) {
       debugLogger(debug, 'Automatically requesting permission from user.', { options })
 
       requestAccess()
