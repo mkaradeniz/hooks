@@ -23,6 +23,7 @@ type Callback = (midiMessage: MidiMessage) => void
 type RequestPermission = () => void
 
 interface Options {
+  messageHistoryCount?: number,
   automaticallyRequestPermission?: boolean
   callback?: Callback
   debug?: boolean
@@ -39,7 +40,14 @@ interface Status {
 type Returns = [MidiMessage[], Status, RequestPermission, WebMidi.MIDIAccess?]
 
 const useMidi = (options: Options = {}): Returns => {
-  const { automaticallyRequestPermission = false, callback, debug = false, suppressActiveSensing = true, sysex = false } = options
+    const {
+    automaticallyRequestPermission = false,
+    callback,
+    debug = false,
+    suppressActiveSensing = true,
+    messageHistoryCount = 256,
+    sysex = false,
+  } = options
 
   const [isAllowed, setIsAllowed] = useState<boolean>(false)
   const [isRequested, setIsRequested] = useState<boolean>(false)
@@ -67,7 +75,12 @@ const useMidi = (options: Options = {}): Returns => {
       default:
         debugLogger(debug, 'Adding `midiMessage` to `midiMessages` array.', { midiMessage, options })
 
-        setMidiMessages(prevMidiMessages => [...prevMidiMessages, midiMessage])
+        setMidiMessages(prevMidiMessages => {
+          if (prevMidiMessages.length === messageHistoryCount) {
+            prevMidiMessages.shift()
+          }
+          return [...prevMidiMessages, midiMessage]
+        })
 
         if (!callback) {
           debugLogger(debug, 'Skipping `callback`.', { midiMessage, options })
