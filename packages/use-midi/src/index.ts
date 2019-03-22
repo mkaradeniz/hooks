@@ -23,10 +23,10 @@ type Callback = (midiMessage: MidiMessage) => void
 type RequestPermission = () => void
 
 interface Options {
-  messageHistoryCount?: number,
   automaticallyRequestPermission?: boolean
   callback?: Callback
-  debug?: boolean
+  messagesHistoryCount?: number
+  debug?: boolean,
   suppressActiveSensing?: boolean
   sysex?: boolean
 }
@@ -40,12 +40,12 @@ interface Status {
 type Returns = [MidiMessage[], Status, RequestPermission, WebMidi.MIDIAccess?]
 
 const useMidi = (options: Options = {}): Returns => {
-    const {
+  const {
     automaticallyRequestPermission = false,
     callback,
+    messagesHistoryCount,
     debug = false,
     suppressActiveSensing = true,
-    messageHistoryCount = 256,
     sysex = false,
   } = options
 
@@ -62,25 +62,24 @@ const useMidi = (options: Options = {}): Returns => {
     const midiMessage = { commandCode, note, rawEvent: midiMessageEvent, timestamp, velocity }
 
     switch (commandCode) {
-      // Active Sensing Event (see: http://electronicmusic.wikia.com/wiki/Active_sensing)
+        // Active Sensing Event (see: http://electronicmusic.wikia.com/wiki/Active_sensing)
       case 254:
         if (suppressActiveSensing) {
           debugLogger(debug, 'Skipping `active sensing` message.')
 
           break
         }
-      // Falling through!
+        // Falling through!
 
-      // tslint:disable-next-line no-switch-case-fall-through
+        // tslint:disable-next-line no-switch-case-fall-through
       default:
         debugLogger(debug, 'Adding `midiMessage` to `midiMessages` array.', { midiMessage, options })
 
-        setMidiMessages(prevMidiMessages => {
-          if (prevMidiMessages.length === messageHistoryCount) {
-            prevMidiMessages.shift()
-          }
-          return [...prevMidiMessages, midiMessage]
-        })
+        setMidiMessages(prevMidiMessages =>
+            [...(
+                messagesHistoryCount && prevMidiMessages.length === messagesHistoryCount ? [...prevMidiMessages].slice(1) : prevMidiMessages
+            ), midiMessage]
+        )
 
         if (!callback) {
           debugLogger(debug, 'Skipping `callback`.', { midiMessage, options })
