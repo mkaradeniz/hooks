@@ -1,6 +1,6 @@
 {
   "name": "@mkaradeniz/use-midi",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "author": "Max Karadeniz <max@karadeniz.io> (http://karadeniz.io/)",
   "description": "React Hook for the 'Web MIDI API'.",
   "keywords": [
