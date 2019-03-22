@@ -43,7 +43,7 @@ const useMidi = (options: Options = {}): Returns => {
   const {
     automaticallyRequestPermission = false,
     callback,
-    messagesHistoryCount,
+    messagesHistoryCount = 256,
     debug = false,
     suppressActiveSensing = true,
     sysex = false,
@@ -77,7 +77,7 @@ const useMidi = (options: Options = {}): Returns => {
 
         setMidiMessages(prevMidiMessages =>
             [...(
-                messagesHistoryCount && prevMidiMessages.length === messagesHistoryCount ? [...prevMidiMessages].slice(1) : prevMidiMessages
+                prevMidiMessages.length === messagesHistoryCount ? [...prevMidiMessages].slice(1) : prevMidiMessages
             ), midiMessage]
         )
 
